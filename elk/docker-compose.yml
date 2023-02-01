@@ -40,6 +40,7 @@ services:
       - discovery.type=single-node
       - xpack.security.enabled=true
       - ES_JAVA_OPTS=-XX:UseAVX=1 -Xms512m -Xmx512m
+      - ELASTIC_PASSWORD=rl64719629
     ulimits:
       memlock:
         hard: -1
@@ -65,7 +66,7 @@ services:
       ELASTICSEARCH_URL: http://elasticsearch:9200
       ELASTICSEARCH_HOSTS: http://elasticsearch:9200
       ELASTICSEARCH_USERNAME: elastic
-      ELASTICSEARCH_PASSWORD: bd
+      ELASTICSEARCH_PASSWORD: rl64719629
       XPACK_ENCRYPTEDSAVEDOBJECTS_ENCRYPTIONKEY: efd7cbea7034cf9fed17c6c4d1162a22
     ports:
       - 5601:5601
