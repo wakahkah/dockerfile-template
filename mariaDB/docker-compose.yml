@@ -1,0 +1,53 @@
+services:
+  mariadb-sample:
+    # We use a mariadb image which supports both amd64 & arm64 architecture
+    image: mariadb:10.6-focal
+    # If you really want to use MySQL, uncomment the following line
+    #image: mysql:8
+    restart: always
+    healthcheck:
+      interval: 30s
+      retries: 3
+      test:
+        [
+          "CMD",
+          "healthcheck.sh",
+          "--su-mysql",
+          "--connect",
+          "--innodb_initialized"
+        ]
+      timeout: 30s
+    secrets:
+      - db-password
+    volumes:
+      - db-data:/var/lib/mysql
+    env_file:
+      - path: ./default.env
+        required: true # default
+      - path: ./override.env
+        required: false
+    environment:
+      - MARIADB_DATABASE=${DATABASE_NAME}
+      - MARIADB_USER=${DB_USER}
+      - MARIADB_PASSWORD=${DB_PWD}
+      - MARIADB_ROOT_PASSWORD_FILE=/run/secrets/db-password
+    expose:
+      - 3306
+    ports:
+      - 3306:3306
+
+  adminer:
+    image: adminer
+    restart: always
+    environment:
+      ADMINER_DEFAULT_SERVER: mariadb
+    ports:
+      - 9009:8080
+
+volumes:
+  db-data:
+
+
+secrets:
+  db-password:
+    file: ./password.txt
