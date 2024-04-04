@@ -23,11 +23,7 @@ services:
       - db-password
     volumes:
       - db-data:/var/lib/mysql
-    env_file:
-      - path: ./default.env
-        required: true # default
-      - path: ./override.env
-        required: false
+    env_file: .env
     environment:
       - MARIADB_DATABASE=${DATABASE_NAME}
       - MARIADB_USER=${DB_USER}
@@ -42,7 +38,7 @@ services:
     image: adminer
     restart: always
     environment:
-      ADMINER_DEFAULT_SERVER: mariadb
+      ADMINER_DEFAULT_SERVER: mariadb-sample
     ports:
       - 9009:8080
 
