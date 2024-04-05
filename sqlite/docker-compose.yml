@@ -1,0 +1,30 @@
+version: '3'
+
+services:
+  sqlite-sample-container:
+    image: sqlite-sample-image:latest
+    build:
+      context: .
+    volumes:
+      - ./database/db.sqlite:/data.sqlite
+      - ./database/init.sql:/data/init.sql:ro
+    container_name: sqlite-container
+
+  sqlite-sample-browser:
+    image: linuxserver/sqlitebrowser
+    ports:
+      - "9008:3000"
+    depends_on:
+      - sqlite-sample-container
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=UTC
+      - ENABLE_UWSGI=true
+    volumes:
+      - sqlite-sample-data:/data/db
+      - ./database/db.sqlite:/data/db.sqlite
+    container_name: sqlite-sample-browser
+
+volumes:
+  sqlite-sample-data:
